@@ -12,7 +12,7 @@
 
   <!-- site generator -->
   <div *ngIf="isSuccess" class="py-4 w-full px-3 bg-green-300">
-    <p class="text-xl font-light">{{popText}}</p>
+    <p class="text-xl font-light">{{ popText }}</p>
   </div>
 
   <div class="px-20 py-10 mb-10 my-5 border-4 border-gray-900">
@@ -78,7 +78,8 @@
       </div>
       <button
         class="ml-2 my-3 mx-0.5 text-sm py-2 px-5 border-2 bg-gray-900 text-white rounded-md shadow"
-
+        routerLink="/password-list"
+        [queryParams]="{id:site.id, siteName:site.siteName, siteUrl:site.siteUrl, siteImgUrl:site.siteImgUrl}"
       >
         Add New Password
       </button>
