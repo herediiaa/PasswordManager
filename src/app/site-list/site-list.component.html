@@ -1,5 +1,5 @@
 <div class="container mx-auto">
-  <h1 class="text-5xl mt-0 mb-8">Codeplan Password Manager</h1>
+  <h1 class="text-5xl mt-10 mb-8">Codeplan Password Manager</h1>
   <p class="mb-5">
     Lorem ipsum dolor sit amet consectetur adipisicing elit. Error illum tempora
     sint minus repellat magni libero. Ratione dignissimos libero sit.
@@ -11,14 +11,83 @@
   </button>
 
   <!-- site generator -->
+
   <div class="px-20 py-10 mb-10 my-5 border-4 border-gray-900">
     <h2 class="text-3xl text-center">Add New Site</h2>
     <p class="text-center text-xl">you can add a new site below form</p>
 
-    <form>
-        <div class="flex flex-col">
-            <label for=""></label>
-        </div>
+    <form #f="ngForm" (ngSubmit)="onSubmit(f.value)">
+      <div class="flex flex-col">
+        <label for="" class="text-lg font-medium mb-2">Site Name</label>
+        <input
+          ngModel
+          type="text"
+          class="border-2 border-gray-900 p-2 rounded-lg w-full"
+          name="siteName"
+        />
+      </div>
+
+      <div class="flex flex-col">
+        <label for="" class="text-lg font-medium mb-2">Site Url</label>
+        <input
+          ngModel
+          type="text"
+          class="border-2 border-gray-900 p-2 rounded-lg w-full"
+          name="siteUrl"
+        />
+      </div>
+
+      <div class="flex flex-col">
+        <label for="" class="text-lg font-medium mb-2">Site Image Url</label>
+        <input
+          ngModel
+          type="text"
+          class="border-2 border-gray-900 p-2 rounded-lg w-full"
+          name="siteImgUrl"
+        />
+      </div>
+      <button
+        class="mt-10 mx-0.5 px-5 py-3 text-sm bg-gray-800 text-white shadow rounded-md"
+      >
+        Add New Site
+      </button>
+
+      <button
+        class="mt-10 mx-0.5 px-5 py-3 text-sm bg-gray-100 text-black shadow rounded-xm border-2 border-gray-700 rounded-md"
+      >
+        Cancel
+      </button>
     </form>
+  </div>
+
+  <!-- cards lists -->
+
+  <div class="grid grid-cols-4">
+    <div class="shadow-lg border-2 broder-gray-900">
+      <img
+        src="https://kinsta.com/es/wp-content/uploads/sites/8/2017/09/como-anadir-un-registro-a-con-godaddy-1024x512.png"
+        alt="banner"
+      />
+      <h3 class="p-3 text-xl font-bold">Godaddy.com</h3>
+      <div class="w-60 px-3 bg-blue-200 ml-2 text-blue-800 rounded-lg text-sm">
+        https://godaddy.com
+      </div>
+      <button
+        class="ml-2 my-3 mx-0.5 text-sm py-2 px-5 border-2 bg-gray-900 text-white rounded-md shadow"
+      >
+        Add New Password
+      </button>
+
+      <button
+        class="my-3 mx-0.5 text-sm py-2 px-3 border-2 border-gray-700 text-black rounded-lg shadow"
+      >
+        Edit
+      </button>
+      <button
+        class="my-3 mx-0.5 text-sm py-2 px-5 border-2 border-gray-700 text-black rounded-lg shadow"
+      >
+        Delite
+      </button>
+    </div>
   </div>
 </div>
