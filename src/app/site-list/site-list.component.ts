@@ -13,29 +13,42 @@ export class SiteListComponent {
     this.loadSites();
   }
   allSites!: Observable<Array<any>>;
-  formModel: Site = {
+  formGroup: Site = {
     siteName: '',
     siteUrl: '',
     siteImgUrl: '',
   };
+  formCurrentId!: string;
   formState: string = 'Add New';
 
   loadSites() {
     this.allSites = this.passwordManagerService.getSites();
   }
   onSubmit(values: Site) {
-    this.passwordManagerService
-      .saveSite(values)
-      .then(() => {
-        console.log('data recived successfully');
-      })
-      .catch(() => {
-        console.log('something went wrong');
-      });
+    if (this.formState === 'Add New') {
+      this.passwordManagerService
+        .saveSite(values)
+        .then(() => {
+          console.log('data recived successfully');
+        })
+        .catch(() => {
+          console.log('something went wrong');
+        });
+    } else if (this.formState === 'Edit') {
+      this.passwordManagerService
+        .editSite(this.formCurrentId, this.formGroup)
+        .then(() => {
+          console.log('edit site successfully');
+        })
+        .catch(() => {
+          console.log('something went wrong');
+        }); gi
+    }
   }
-  editSite(site: Site) {
+  editSite(site: any) {
     console.log(site.id);
-    this.formModel = site;
-    this.formState = 'Edit '
+    this.formGroup = site;
+    this.formState = 'Edit';
+    this.formCurrentId = site.id;
   }
 }
