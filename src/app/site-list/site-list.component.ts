@@ -42,7 +42,7 @@ export class SiteListComponent {
         })
         .catch(() => {
           console.log('something went wrong');
-        }); gi
+        });
     }
   }
   editSite(site: any) {
@@ -50,5 +50,15 @@ export class SiteListComponent {
     this.formGroup = site;
     this.formState = 'Edit';
     this.formCurrentId = site.id;
+  }
+  deliteSite(id: string) {
+    this.passwordManagerService
+      .deliteSite(id)
+      .then(() => {
+        'delite site successfully';
+      })
+      .catch(() => {
+        'something went wrong';
+      });
   }
 }

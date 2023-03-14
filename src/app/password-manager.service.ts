@@ -6,6 +6,7 @@ import {
   collectionData,
   doc,
   updateDoc,
+  deleteDoc,
 } from '@angular/fire/firestore';
 import { Site } from './interfaces/sitesInfo.interface';
 @Injectable({
@@ -26,5 +27,10 @@ export class PasswordManagerService {
   editSite(id: string, data: any) {
     const document = doc(this.firestoreModule, 'sites', id);
     return updateDoc(document, data);
+  }
+
+  deliteSite(id: string) {
+    const document = doc(this.firestoreModule, 'sites', id);
+    return deleteDoc(document);
   }
 }
