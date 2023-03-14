@@ -1,14 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  addDoc,
+  collectionData,
+} from '@angular/fire/firestore';
+import { Site } from './interfaces/sitesInfo.interface';
 @Injectable({
   providedIn: 'root',
 })
 export class PasswordManagerService {
   constructor(private readonly firestoreModule: Firestore) {}
-  
-  saveSite(data: object) {
+
+  saveSite(data: Site) {
     const coleccion = collection(this.firestoreModule, 'sites');
     return addDoc(coleccion, data);
   }
-
+  getSites() {
+    const coleccion = collection(this.firestoreModule, 'sites');
+    return collectionData(coleccion, { idField: 'id' });
+  }
 }

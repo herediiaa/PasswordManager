@@ -63,14 +63,14 @@
   <!-- cards lists -->
 
   <div class="grid grid-cols-4">
-    <div class="shadow-lg border-2 broder-gray-900">
+    <div *ngFor="let site of allSites | async" class="shadow-lg border-2 broder-gray-900">
       <img
-        src="https://kinsta.com/es/wp-content/uploads/sites/8/2017/09/como-anadir-un-registro-a-con-godaddy-1024x512.png"
+        [src]="site.siteImgUrl"
         alt="banner"
       />
-      <h3 class="p-3 text-xl font-bold">Godaddy.com</h3>
+      <h3 class="p-3 text-xl font-bold">{{site.siteName}}</h3>
       <div class="w-60 px-3 bg-blue-200 ml-2 text-blue-800 rounded-lg text-sm">
-        https://godaddy.com
+        {{site.siteUrl}}
       </div>
       <button
         class="ml-2 my-3 mx-0.5 text-sm py-2 px-5 border-2 bg-gray-900 text-white rounded-md shadow"

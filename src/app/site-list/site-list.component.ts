@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { PasswordManagerService } from '../password-manager.service';
+import { Site } from '../interfaces/sitesInfo.interface';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-site-list',
@@ -7,11 +9,14 @@ import { PasswordManagerService } from '../password-manager.service';
   styleUrls: ['./site-list.component.css'],
 })
 export class SiteListComponent {
-  constructor(
-    private readonly passwordManagerService: PasswordManagerService
-  ) {}
-
-  onSubmit(values: Object) {
+  constructor(private readonly passwordManagerService: PasswordManagerService) {
+    this.loadSites();
+  }
+  allSites!: Observable<Array<any>>;
+  loadSites() {
+    this.allSites = this.passwordManagerService.getSites();
+  }
+  onSubmit(values: Site) {
     this.passwordManagerService
       .saveSite(values)
       .then(() => {
@@ -21,5 +26,4 @@ export class SiteListComponent {
         console.log('something went wrong');
       });
   }
-
 }
