@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { PasswordManagerService } from '../password-manager.service';
 import { Site } from '../interfaces/sitesInfo.interface';
-import { Observable } from 'rxjs';
+import { Observable, timeout } from 'rxjs';
 
 @Component({
   selector: 'app-site-list',
@@ -21,6 +21,9 @@ export class SiteListComponent {
   formCurrentId!: string;
   formState: string = 'Add New';
 
+  isSuccess: boolean = false;
+  popText!: string;
+
   loadSites() {
     this.allSites = this.passwordManagerService.getSites();
   }
@@ -29,7 +32,12 @@ export class SiteListComponent {
       this.passwordManagerService
         .saveSite(values)
         .then(() => {
-          console.log('data recived successfully');
+          this.isSuccess = true;
+          this.messageSuccessfull('New Site Added Successfully');
+
+          setTimeout(() => {
+            this.isSuccess = false;
+          }, 2000);
         })
         .catch(() => {
           console.log('something went wrong');
@@ -38,7 +46,11 @@ export class SiteListComponent {
       this.passwordManagerService
         .editSite(this.formCurrentId, this.formGroup)
         .then(() => {
-          console.log('edit site successfully');
+          this.isSuccess = true;
+          this.messageSuccessfull('Site Edited Correctly');
+          setTimeout(() => {
+            this.isSuccess = false;
+          }, 2000);
         })
         .catch(() => {
           console.log('something went wrong');
@@ -56,9 +68,17 @@ export class SiteListComponent {
       .deliteSite(id)
       .then(() => {
         'delite site successfully';
+        this.messageSuccessfull('Site Delited Correctly');
+        setTimeout(() => {
+          this.isSuccess = false;
+        }, 2000);
       })
       .catch(() => {
         'something went wrong';
       });
+  }
+  messageSuccessfull(mesagge: string) {
+    this.isSuccess = true;
+    this.popText = mesagge;
   }
 }
