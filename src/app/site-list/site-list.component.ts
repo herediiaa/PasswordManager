@@ -13,6 +13,13 @@ export class SiteListComponent {
     this.loadSites();
   }
   allSites!: Observable<Array<any>>;
+  formModel: Site = {
+    siteName: '',
+    siteUrl: '',
+    siteImgUrl: '',
+  };
+  formState: string = 'Add New';
+
   loadSites() {
     this.allSites = this.passwordManagerService.getSites();
   }
@@ -25,5 +32,10 @@ export class SiteListComponent {
       .catch(() => {
         console.log('something went wrong');
       });
+  }
+  editSite(site: Site) {
+    console.log(site.id);
+    this.formModel = site;
+    this.formState = 'Edit '
   }
 }
