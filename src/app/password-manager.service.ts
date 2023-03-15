@@ -49,4 +49,14 @@ export class PasswordManagerService {
     );
     return collectionData(dbSubCollection, { idField: 'id' });
   }
+
+  editPassword(passwordId:string, siteId:string, data:any){
+    delete data.id
+    const document = doc(this.firestoreModule, `sites/${siteId}/passwords`, passwordId)
+    return updateDoc(document, data)
+  }
+  deletePassword(id:string,siteId:string){
+    const dbSubCollection = doc(this.firestoreModule, `sites/${siteId}/passwords`,id )
+    return deleteDoc(dbSubCollection)
+  }
 }
