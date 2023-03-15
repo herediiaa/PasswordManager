@@ -33,4 +33,20 @@ export class PasswordManagerService {
     const document = doc(this.firestoreModule, 'sites', id);
     return deleteDoc(document);
   }
+
+  /* Password-list querys */
+  addPasswords(data: any, siteId: string) {
+    const dbSubCollection = collection(
+      this.firestoreModule,
+      `sites/${siteId}/passwords`
+    );
+    return addDoc(dbSubCollection, data);
+  }
+  loadPasswords(siteId: string) {
+    const dbSubCollection = collection(
+      this.firestoreModule,
+      `sites/${siteId}/passwords`
+    );
+    return collectionData(dbSubCollection, { idField: 'id' });
+  }
 }
