@@ -1,58 +1,89 @@
 <app-navbar></app-navbar>
-<div class="container mx-auto">
+<div class="container mx-auto px-4">
   <h1 class="text-5xl mt-10 mb-8">Codeplan Password Manager</h1>
-  <p class="mb-5">
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Error illum tempora
-    sint minus repellat magni libero. Ratione dignissimos libero sit.
+  <p class="mb-5 text-lg">
+    With our app, you can safely store your passwords and usernames for all your favorite websites in one place. You will never have to worry about forgetting your login credentials again.
   </p>
   <button
+    [disabled]="!formGroup.valid"
+    (click)="onSubmit(formGroup.value)"
     class="mb-5 mx-0 py-2 px-4 border-2 text-sm bg-gray-900 text-white shadow rounded-md"
   >
     Add New Site
   </button>
 
   <!-- site generator -->
-  <div *ngIf="isSuccess" class="py-4 w-full px-3 bg-green-300">
-    <p class="text-xl font-light">{{ popText }}</p>
-  </div>
 
   <div class="px-20 py-10 mb-10 my-5 border-4 border-gray-900">
     <h2 class="text-3xl text-center">{{ formState }} Site</h2>
     <p class="text-center text-xl">you can {{ formState }} site below form</p>
 
     <!-- form generator -->
-    <form #f="ngForm" (ngSubmit)="onSubmit(f.value)">
+    <form
+      [formGroup]="formGroup"
+      id="id"
+      (ngSubmit)="onSubmit(formGroup.value)"
+    >
       <div class="flex flex-col">
         <label for="" class="text-lg font-medium mb-2">Site Name</label>
         <input
-          [(ngModel)]="formGroup.siteName"
+          formControlName="siteName"
           type="text"
           class="border-2 border-gray-900 p-2 rounded-lg w-full"
           name="siteName"
         />
+        <div
+          class="bg-red-400 py-3 mt-3 px-5 font-thin"
+          *ngIf="
+            !formGroup.controls['siteName'].valid &&
+            formGroup.controls['siteName'].touched
+          "
+        >
+          Site Name must be completed
+        </div>
       </div>
 
       <div class="flex flex-col">
         <label for="" class="text-lg font-medium mb-2">Site Url</label>
         <input
-          [(ngModel)]="formGroup.siteUrl"
+          formControlName="siteUrl"
           type="text"
           class="border-2 border-gray-900 p-2 rounded-lg w-full"
           name="siteUrl"
         />
+        <div
+          class="bg-red-400 py-3 mt-3 px-5 font-thin"
+          *ngIf="
+            !formGroup.controls['siteUrl'].valid &&
+            formGroup.controls['siteUrl'].touched
+          "
+        >
+          Site Url must be completed
+        </div>
       </div>
 
       <div class="flex flex-col">
         <label for="" class="text-lg font-medium mb-2">Site Image Url</label>
         <input
-          [(ngModel)]="formGroup.siteImgUrl"
+          formControlName="siteImgUrl"
           type="text"
           class="border-2 border-gray-900 p-2 rounded-lg w-full"
           name="siteImgUrl"
         />
+        <div
+          class="bg-red-400 py-3 mt-3 px-5 font-thin"
+          *ngIf="
+            !formGroup.controls['siteImgUrl'].valid &&
+            formGroup.controls['siteImgUrl'].touched
+          "
+        >
+          Site Image must be completed
+        </div>
       </div>
       <button
+        type="submit"
         class="mt-10 mx-0.5 px-5 py-3 text-sm bg-gray-800 text-white shadow rounded-md"
+        [disabled]="!formGroup.valid"
       >
         {{ formState }} Site
       </button>
@@ -65,12 +96,15 @@
     </form>
   </div>
 
+  <div *ngIf="isSuccess" class="py-4 my-5 w-full px-3 bg-green-300">
+    <p class="text-xl font-light">{{ popText }}</p>
+  </div>
   <!-- cards lists -->
 
-  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 ">
     <div
       *ngFor="let site of allSites | async"
-      class="shadow-lg border-2 broder-gray-900"
+      class="shadow-lg border-2 broder-gray-900 "
     >
       <img [src]="site.siteImgUrl" alt="banner" />
       <h3 class="p-3 text-xl font-bold">{{ site.siteName }}</h3>
@@ -80,7 +114,12 @@
       <button
         class="ml-2 my-3 mx-0.5 text-sm py-2 px-5 border-2 bg-gray-900 text-white rounded-md shadow"
         routerLink="/password-list"
-        [queryParams]="{id:site.id, siteName:site.siteName, siteUrl:site.siteUrl, siteImgUrl:site.siteImgUrl}"
+        [queryParams]="{
+          id: site.id,
+          siteName: site.siteName,
+          siteUrl: site.siteUrl,
+          siteImgUrl: site.siteImgUrl
+        }"
       >
         Add New Password
       </button>

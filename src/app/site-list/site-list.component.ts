@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { PasswordManagerService } from '../password-manager.service';
 import { Site } from '../interfaces/sitesInfo.interface';
 import { Observable, timeout } from 'rxjs';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-site-list',
@@ -9,15 +10,23 @@ import { Observable, timeout } from 'rxjs';
   styleUrls: ['./site-list.component.css'],
 })
 export class SiteListComponent {
-  constructor(private readonly passwordManagerService: PasswordManagerService) {
+  constructor(
+    private readonly passwordManagerService: PasswordManagerService,
+    private formBuilder: FormBuilder
+  ) {
     this.loadSites();
+    this.formGroup = this.createForm()
+    
   }
   allSites!: Observable<Array<any>>;
-  formGroup: Site = {
-    siteName: '',
-    siteUrl: '',
-    siteImgUrl: '',
-  };
+  formGroup!: FormGroup 
+  createForm(){
+  return this.formBuilder.group({
+    siteName: ["",Validators.required,],
+    siteUrl: ["",Validators.required],
+    siteImgUrl: ["",Validators.required],
+  })}
+ 
   formCurrentId!: string;
   formState: string = 'Add New';
 
@@ -29,9 +38,15 @@ export class SiteListComponent {
   }
   onSubmit(values: Site) {
     if (this.formState === 'Add New') {
+      console.log(values)
       this.passwordManagerService
         .saveSite(values)
         .then(() => {
+          this.formGroup = this.formBuilder.group({
+            siteName:[null,Validators.required],
+            siteImg:[null,Validators.required],
+            siteImgUrl:[null,Validators.required],
+          })
           this.isSuccess = true;
           this.messageSuccessfull('New Site Added Successfully');
 
@@ -43,8 +58,10 @@ export class SiteListComponent {
           console.log('something went wrong');
         });
     } else if (this.formState === 'Edit') {
+      console.log("Aaaaaaaaaaaaaaa")
+
       this.passwordManagerService
-        .editSite(this.formCurrentId, this.formGroup)
+        .editSite(this.formCurrentId, values)
         .then(() => {
           this.isSuccess = true;
           this.messageSuccessfull('Site Edited Correctly');
@@ -58,10 +75,15 @@ export class SiteListComponent {
     }
   }
   editSite(site: any) {
-    console.log(site.id);
-    this.formGroup = site;
-    this.formState = 'Edit';
+    
     this.formCurrentId = site.id;
+    this.formGroup.setValue({
+      siteName: site.siteName,
+      siteUrl: site.siteUrl,
+      siteImgUrl: site.siteImgUrl,
+    })
+    this.formState = 'Edit';
+    console.log(this.formGroup.value)
   }
   deliteSite(id: string) {
     this.passwordManagerService

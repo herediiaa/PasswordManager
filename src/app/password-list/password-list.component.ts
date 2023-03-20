@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Site } from '../interfaces/sitesInfo.interface';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PasswordManagerService } from '../password-manager.service';
 import { Observable } from 'rxjs';
 import { AES, enc } from 'crypto-js';
@@ -14,11 +14,7 @@ export class PasswordListComponent {
   passwordDecrypte!: string;
   siteInfo!: any;
   sitePasswords!: Array<any>;
-  formGroup: any = {
-    email: '',
-    userName: '',
-    password: '',
-  };
+  formGroup!: FormGroup;
 
   formStatus: string = 'Add New';
   formPasswordId!: string;
@@ -26,11 +22,13 @@ export class PasswordListComponent {
   isSuccess: boolean = false;
   popText!: string;
 
-  decrypStatus: string = 'Decrypt'
+  decrypStatus: string = 'Decrypt';
   constructor(
     private readonly router: ActivatedRoute,
+    private formBuilder: FormBuilder,
     private readonly passwordManagerService: PasswordManagerService
   ) {
+    this.formGroup = this.createForm();
     this.router.queryParams.subscribe((data: any) => {
       console.log(data);
       this.siteInfo = data;
@@ -44,7 +42,7 @@ export class PasswordListComponent {
         .addPasswords(data, this.siteInfo.id)
         .then(() => {
           this.resetForm();
-          this.messageSuccessfull('Password Added Correctly');
+          this.messageSuccessfull('User & Password Added Correctly');
           setTimeout(() => {
             this.isSuccess = false;
           }, 2000);
@@ -57,7 +55,7 @@ export class PasswordListComponent {
         .editPassword(this.formPasswordId, this.siteInfo.id, data)
         .then(() => {
           this.resetForm();
-          this.messageSuccessfull('Password Edit Correctly');
+          this.messageSuccessfull('User & Password Edit Correctly');
           setTimeout(() => {
             this.isSuccess = false;
           }, 2000);
@@ -76,22 +74,29 @@ export class PasswordListComponent {
   }
   onEditPassword(values: any) {
     this.formPasswordId = values.id;
-    this.formGroup = values;
+
+    this.formGroup.setValue({
+      username: values.username,
+      email: values.email,
+      password: values.password
+
+    })
     this.formStatus = 'Edit';
+    console.log(this.formGroup.value)
   }
   resetForm() {
-    this.formGroup = {
-      username: '',
-      email: '',
-      password: '',
-    };
+    this.formGroup = this.formBuilder.group({
+      email: ['', Validators.required],
+      password: ['', Validators.required],
+      username: ['', Validators.required],
+    });
     this.formStatus = 'Add New';
   }
   onDeletePassword(id: string) {
     this.passwordManagerService
       .deletePassword(id, this.siteInfo.id)
       .then(() => {
-        this.messageSuccessfull('Password Delited Correctly');
+        this.messageSuccessfull('User & Password Delited Correctly');
         setTimeout(() => {
           this.isSuccess = false;
         }, 2000);
@@ -113,18 +118,24 @@ export class PasswordListComponent {
     return decryptPassword;
   }
   onDecryptPassword(password: string, i: any) {
-    if (this.decrypStatus === "Encrypt") {
+    if (this.decrypStatus === 'Encrypt') {
       const decPassword = this.encrypPassword(password);
-      this.sitePasswords[i].password = decPassword
-      console.log("mostrando contrasena encriptada")
-      console.log(decPassword)
-      this.decrypStatus = "Decrypt"
-    }
-    else if(this.decrypStatus == "Decrypt"){
+      this.sitePasswords[i].password = decPassword;
+      console.log('mostrando contrasena encriptada');
+      console.log(decPassword);
+      this.decrypStatus = 'Decrypt';
+    } else if (this.decrypStatus == 'Decrypt') {
       const decPassword = this.decryptPassword(password);
-      this.sitePasswords[i].password = decPassword
-      this.decrypStatus = "Encrypt"
-      console.log("password ")
+      this.sitePasswords[i].password = decPassword;
+      this.decrypStatus = 'Encrypt';
+      console.log('password ');
     }
+  }
+  createForm() {
+    return this.formBuilder.group({
+      email: ['', Validators.required],
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+    });
   }
 }

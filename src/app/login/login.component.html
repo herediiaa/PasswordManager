@@ -2,47 +2,70 @@
   <div
     class="flex flex-col items-center justify-center px-6 py-8 h-screen mx-auto"
   >
-
     <div class="border-4 mx-w-md border-gray-900 bg-white rounded-lg shadow-md">
-
       <div class="p-6 space-y-6">
         <h1 class="text-2xl font-medium text-gray-900">
           Login Into Your Account Your Email
         </h1>
         <div *ngIf="isError" class="py-3 px-10 bg-red-300 font-thin text-lg">
           The Username or Password is Wrong
-      
         </div>
-        <form class="space-y-6" #f="ngForm" (ngSubmit)="onSubmit(f.value)">
+        <form
+          class="space-y-6"
+          [formGroup]="formGroup"
+          (ngSubmit)="onSubmit(formGroup.value)"
+        >
           <div class="flex flex-col">
             <label for="email" class="mb-2 text-sm font-medium text-gray-900"
               >Your Email</label
             >
             <input
-              ngModel
+              autofocus
+              formControlName="email"
               type="text"
               placeholder="Email"
               id="email"
               name="email"
               class="border-2 border-gray-900 rounded-lg w-full p-2.5 bg-gray-50 text-gray-900"
             />
+
+            <div
+              class="bg-red-400 py-3 mt-3 px-5 font-thin"
+              *ngIf="
+                !formGroup.controls['email'].valid &&
+                formGroup.controls['email'].touched
+              "
+            >
+              Email must be completed
+            </div>
           </div>
           <div class="flex flex-col">
             <label for="password" class="mb-2 text-sm font-medium text-gray-900"
               >Password</label
             >
             <input
-              ngModel
+              formControlName="password"
               type="password"
               placeholder="********"
               id="password"
               name="password"
               class="border-2 border-gray-900 rounded-lg w-full p-2.5 bg-gray-50 text-gray-900"
             />
+            <div
+              class="bg-red-400 py-3 mt-3 px-5 font-thin"
+              *ngIf="
+                !formGroup.controls['password'].valid &&
+                formGroup.controls['password'].touched
+              "
+            >
+              Password must be completed
+            </div>
           </div>
           <button
-          type="submit"
-            class="text-center border-2 bg-gray-800 hover:bg-gray-900 text-white border-white font-medium w-full py-2.5 px-5 rounded-lg shadow-md"
+          [disabled]="!formGroup.valid"
+            type="submit"
+            class=" <%= !formGroup.valid ? 'hover:bg-gray-900' : '' %> text-center border-2 bg-gray-800  text-white border-white font-medium w-full py-2.5 px-5 rounded-lg shadow-md"
+            
           >
             Sign In
           </button>
