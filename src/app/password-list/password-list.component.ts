@@ -121,14 +121,11 @@ export class PasswordListComponent {
     if (this.decrypStatus === 'Encrypt') {
       const decPassword = this.encrypPassword(password);
       this.sitePasswords[i].password = decPassword;
-      console.log('mostrando contrasena encriptada');
-      console.log(decPassword);
       this.decrypStatus = 'Decrypt';
     } else if (this.decrypStatus == 'Decrypt') {
       const decPassword = this.decryptPassword(password);
       this.sitePasswords[i].password = decPassword;
       this.decrypStatus = 'Encrypt';
-      console.log('password ');
     }
   }
   createForm() {

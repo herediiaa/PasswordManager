@@ -1,0 +1,99 @@
+<section class="bg-gray-50 w-full h-screen">
+    <div
+      class="flex flex-col items-center justify-center px-6 py-8 h-screen mx-auto"
+    >
+    <div
+    class="bg-red-400 py-3 my-3 px-5 font-thin"
+    *ngIf="isError"
+  >
+    {{popMessage}}
+  </div>
+  <div
+  class="bg-green-400 py-3 my-3 px-5 font-thin"
+  *ngIf="isSuccess"
+>
+  {{popMessage}}
+</div>
+
+      <div class="border-4 mx-w-md border-gray-900 bg-white rounded-lg shadow-md">
+        <div class="p-6 space-y-6">
+
+          <h1 class="text-2xl font-medium text-gray-900">
+            Create Your New Account
+          </h1>
+
+          <form
+            class="space-y-6"
+            [formGroup]="formGroup"
+            (ngSubmit)="onSubmit(formGroup.value)"
+          >
+            <div class="flex flex-col">
+              <label for="email" class="mb-2 text-sm font-medium text-gray-900"
+                >Your Email</label
+              >
+              <input
+                autofocus
+                formControlName="email"
+                type="text"
+                placeholder="Email"
+                id="email"
+                name="email"
+                class="border-2 border-gray-900 rounded-lg w-full p-2.5 bg-gray-50 text-gray-900"
+              />
+  
+              <div
+                class="bg-red-400 py-3 mt-3 px-5 font-thin"
+                *ngIf="
+                  formGroup.controls['email'].touched &&
+                  formGroup.controls['email'].invalid &&
+                  (formGroup.controls['email'].dirty ||
+                    formGroup.controls['password'].dirty)
+                "
+              >
+                Email must be completed
+              </div>
+            </div>
+            <div class="flex flex-col">
+              <label for="password" class="mb-2 text-sm font-medium text-gray-900"
+                >Password</label
+              >
+              <input
+                formControlName="password"
+                type="password"
+                placeholder="********"
+                id="password"
+                name="password"
+                class="border-2 border-gray-900 rounded-lg w-full p-2.5 bg-gray-50 text-gray-900"
+              />
+              <div
+                class="bg-red-400 py-3 mt-3 px-5 font-thin"
+                *ngIf="
+                  formGroup.controls['password'].touched &&
+                  !formGroup.controls['password'].value &&
+                  formGroup.controls['password'].invalid
+                "
+              >
+                Password must be completed
+              </div>
+            </div>
+            <button
+              [disabled]="!formGroup.valid"
+              type="submit"
+              class="<%= !formGroup.valid ? 'hover:bg-gray-900' : '' %> text-center border-2 bg-gray-800 text-white border-white font-medium w-full py-2.5 px-5 rounded-lg shadow-md"
+            >
+              Create
+            </button>
+          </form>
+          <button
+          type="button"
+          routerLink="/"
+          class="text-center border-2 bg-white flex justify-center gap-1 text-black border-gray-900 font-medium w-full py-2.5 px-5 rounded-lg shadow-md"
+        >
+          I Have an Account
+        </button> 
+        </div>
+      </div>
+    </div>
+  
+  </section>
+  

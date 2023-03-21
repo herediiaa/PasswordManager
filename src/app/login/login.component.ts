@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
-import { AuthenticationService } from '../authentication.service';
+import {Inject} from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { GoogleAuthProvider } from '@angular/fire/auth';
+import { GoogleService } from './google.service';
+import {MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login',
@@ -13,25 +16,21 @@ export class LoginComponent {
 
   isError: boolean = false;
   constructor(
-    private readonly authenticationService: AuthenticationService,
+    private googleAuth: GoogleService,
     private router: Router,
-    private readonly formbuilder: FormBuilder
+    private readonly formbuilder: FormBuilder,
   ) {
     this.formGroup = this.createForm();
   }
   onSubmit(value: any) {
-    this.authenticationService
-      .loadUser(value.email, value.password)
+    this.googleAuth.SignIn(value.email, value.password)
       .then(() => {
-        console.log('User Acepted');
         this.isError = false;
-        this.router.navigate(['/site-list']);
-        
+        console.log(localStorage)
       })
       .catch((err) => {
         this.isError = true;
         setTimeout(() => {
-          
           this.formGroup.reset();
         }, 2000);
       });
@@ -42,4 +41,10 @@ export class LoginComponent {
       password: ['', Validators.required],
     });
   }
+
+
+
+
 }
+
+

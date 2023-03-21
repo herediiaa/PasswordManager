@@ -12,6 +12,9 @@ import { SiteListComponent } from './site-list/site-list.component';
 import { LoginComponent } from './login/login.component';
 import { PasswordListComponent } from './password-list/password-list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AngularFireModule } from '@angular/fire/compat';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SingUpComponent } from './sing-up/sing-up.component';
 
 @NgModule({
   declarations: [
@@ -19,16 +22,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     NavbarComponent,
     SiteListComponent,
     LoginComponent,
-    PasswordListComponent
+    PasswordListComponent,
+    SingUpComponent,
   ],
   imports: [
     BrowserModule,
+
     FormsModule,
     AppRoutingModule,
     ReactiveFormsModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore())
+    provideFirestore(() => getFirestore()),
+    AngularFireModule.initializeApp(environment.firebase),
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

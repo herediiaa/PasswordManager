@@ -3,6 +3,7 @@ import { PasswordManagerService } from '../password-manager.service';
 import { Site } from '../interfaces/sitesInfo.interface';
 import { Observable, timeout } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { GoogleService } from '../login/google.service';
 
 @Component({
   selector: 'app-site-list',
@@ -12,7 +13,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class SiteListComponent {
   constructor(
     private readonly passwordManagerService: PasswordManagerService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
   ) {
     this.loadSites();
     this.formGroup = this.createForm()
@@ -38,7 +39,6 @@ export class SiteListComponent {
   }
   onSubmit(values: Site) {
     if (this.formState === 'Add New') {
-      console.log(values)
       this.passwordManagerService
         .saveSite(values)
         .then(() => {
@@ -48,29 +48,24 @@ export class SiteListComponent {
             siteImgUrl:[null,Validators.required],
           })
           this.isSuccess = true;
-          this.messageSuccessfull('New Site Added Successfully');
 
           setTimeout(() => {
             this.isSuccess = false;
           }, 2000);
         })
         .catch(() => {
-          console.log('something went wrong');
         });
     } else if (this.formState === 'Edit') {
-      console.log("Aaaaaaaaaaaaaaa")
 
       this.passwordManagerService
         .editSite(this.formCurrentId, values)
         .then(() => {
           this.isSuccess = true;
-          this.messageSuccessfull('Site Edited Correctly');
           setTimeout(() => {
             this.isSuccess = false;
           }, 2000);
         })
         .catch(() => {
-          console.log('something went wrong');
         });
     }
   }
@@ -83,14 +78,12 @@ export class SiteListComponent {
       siteImgUrl: site.siteImgUrl,
     })
     this.formState = 'Edit';
-    console.log(this.formGroup.value)
   }
   deliteSite(id: string) {
     this.passwordManagerService
       .deliteSite(id)
       .then(() => {
         'delite site successfully';
-        this.messageSuccessfull('Site Delited Correctly');
         setTimeout(() => {
           this.isSuccess = false;
         }, 2000);
@@ -103,4 +96,5 @@ export class SiteListComponent {
     this.isSuccess = true;
     this.popText = mesagge;
   }
+
 }

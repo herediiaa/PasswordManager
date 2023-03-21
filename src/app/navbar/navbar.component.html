@@ -1,10 +1,10 @@
 <div class="bg-white border-b-2 py-3 border-black px-2 shadow-md">
     <div class=" container flex items-center justify-between mx-auto">
         <a href="/site-list">
-            <span class="font-semibold text-2xl self-center">PasswordManager</span>
+            <span class="font-medium text-2xl self-center">PasswordManager</span>
         </a>
         
         <button class="border-2 border-gray-600 bg-black text-white px-5 rounded-lg py-3 text-sm"
-        [routerLink]="['/']">Logout</button>
+        (click)="logout()">Logout</button>
     </div>
 </div>

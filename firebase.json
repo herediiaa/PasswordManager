@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "public",
+    "public": "dist/password-manager-app",
     "ignore": [
       "firebase.json",
       "**/.*",
