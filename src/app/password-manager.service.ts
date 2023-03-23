@@ -13,6 +13,8 @@ import {
   where,
 } from '@angular/fire/firestore';
 import { Site } from './interfaces/sitesInfo.interface';
+import { JsonPipe } from '@angular/common';
+import { user } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +30,7 @@ export class PasswordManagerService {
     return addDoc(coleccion, data);
   }
 
-/*   async verifiedUser(email: string) {
+  /*   async verifiedUser(email: string) {
     let response!: Boolean;
     const dbSubCollection = collection(this.firestoreModule, 'users');
     const a: any = query(dbSubCollection, where('email', '==', email));
@@ -46,39 +48,24 @@ export class PasswordManagerService {
     return response;
   } */
 
-  /* va a crear un usuario en el caso de que el usuario NO este en la base de datos */
-  createUser(email: string) {
-    /* instanciamos la coleccion donde debemos agregar el usuario si es necesario */
-    const userCollection = collection(this.firestoreModule, 'users');
-
-    // consultamos a nuestra coleccion con un query de filtracion where 
-    /* para traer dentro de la colecion un documento que contenga un mail ya registardo */
-    const q = query(userCollection, where('email', '==', email));
-    
-    // ejecutamos y traemos los documentos de la coleccion instanciada
-    return getDocs(q).then((querySnapshot) => {
-      /* como promesa devuelve la respuesta */
-      if (!querySnapshot.empty) {
-        /* si trae algo */
-        // Ya existe un documento con el mismo correo electrónico
-        /* devolvemos */
-        return Promise.reject('Ya existe un usuario con este correo electrónico');
-        
+  /* verificacion de usuario en DB */
+  async isUser(userData: any) {
+    const usuarioEmail = query(collection(this.firestoreModule, 'users'), where('email', '==', userData.email));
+    const usuarioDoc = await getDocs(usuarioEmail)
+    let response:string = 'user register'
+      if (usuarioDoc.empty) {
+        console.log(`user ${userData.email} is not register`)
+        response = 'user not register'
       }
-      // No existe un documento con el mismo correo electrónico, crea uno nuevo
-      /* si no trae nada, es por que no se encontro un documento con el email proporcionado
-      por lo que no existe, no esta registrado */
-      /* devolvemos el documento de referencia de lo que generamos */
-      return addDoc(userCollection, { email }).then((userRefDoc) => {
-        /* addDoc nos permite guardar data en un lugar de la base de datos */
-        console.log('Document ID:', userRefDoc.id);/* referencia del id de coleccion en el que se guardo nuestra data */
-        /* guardamos en el localStorage ese id, nos servira ya que sabremos la ruta
-        users/userRefDoc.id */
-        localStorage.setItem('userId', JSON.stringify(userRefDoc.id));
-        /* avisamos que creamos un usuario */
-        console.log('colection de users creada passwordMnager');
-      });
-    });
+      return response
+    
+  }
+
+  async createUser(data: any) {
+    const userDocument = await addDoc(collection(this.firestoreModule, 'users'), data);
+    /* user documento reference */
+    localStorage.setItem('userPath', JSON.stringify(userDocument.id));/* id del docuemnto en DB */
+    console.log(`usuario con id ${userDocument.id} creado`);
   }
 
   /* Password-list querys */

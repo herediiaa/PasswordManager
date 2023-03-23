@@ -65,6 +65,7 @@
             </div>
           </div>
           <button
+           
             [disabled]="!formGroup.valid"
             type="submit"
             class="<%= !formGroup.valid ? 'hover:bg-gray-900' : '' %> text-center border-2 bg-gray-800 text-white border-white font-medium w-full py-2.5 px-5 rounded-lg shadow-md"
@@ -73,15 +74,14 @@
           </button>
         </form>
         <button
-        type="button"
-        routerLink="/singUp"
-        class="text-center border-2 bg-white flex justify-center gap-1 text-black border-gray-900 font-medium w-full py-2.5 px-5 rounded-lg shadow-md"
-      >
-      You do not have an account? Let's make it!
-        <span class="material-symbols-outlined"> login </span>
-      </button> 
+          type="button"
+          routerLink="/singUp"
+          class="text-center border-2 bg-white flex justify-center gap-1 text-black border-gray-900 font-medium w-full py-2.5 px-5 rounded-lg shadow-md"
+        >
+          You do not have an account? Let's make it!
+          <span class="material-symbols-outlined"> login </span>
+        </button>
       </div>
     </div>
   </div>
-
 </section>

@@ -24,7 +24,7 @@ export class SingUpComponent {
   async onSubmit(value: any) {
     await this.googleAuth
       .signUp(value.email, value.password)
-      .then(() => {
+      .then((status) => {
         this.formSucces('Account Registered Successfully')
         setTimeout(() => {
           this.router.navigate(['/']);
@@ -61,5 +61,8 @@ export class SingUpComponent {
   }
   registerByGoogle(){
     return this.googleAuth.googleAuth()
+  }
+  onCreateAccout(email:string,password:string){
+    this.googleAuth.signUp
   }
 }

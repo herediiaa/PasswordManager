@@ -11,6 +11,7 @@ import {
   query,
   where,
 } from '@angular/fire/firestore';
+import { JsonPipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -39,19 +40,17 @@ export class GoogleService {
 
   /* verificacion  */
   SignIn(email: string, password: string) {
-    return this.afAuth
-      .signInWithEmailAndPassword(email, password)
-      .then((result) => {
-        console.log(result);
-        this.userData = this.setUserData(result.user);
-        console.log(this.userData);
-        this.afAuth.authState.subscribe((user) => {
-          if (user) {
-            this.router.navigate(['site-list']);
-          }
-          console.log('google service pa');
-        });
+    return this.afAuth.signInWithEmailAndPassword(email, password).then((result) => {
+      console.log(result);
+      this.userData = this.setUserData(result.user);
+      console.log(this.userData);
+      this.afAuth.authState.subscribe((user) => {
+        if (user) {
+          this.router.navigate(['site-list']);
+        }
+        console.log('google service pa');
       });
+    });
   }
 
   setUserData(user: any) {
@@ -59,7 +58,7 @@ export class GoogleService {
       uid: user.uid,
       email: user.email,
       displayNamae: user.displayName,
-      photoUrl: user.photoUrl,
+      photoUrl: user.photoURL,
       emailVerified: user.emailVerified,
     };
     return userData;
@@ -67,6 +66,13 @@ export class GoogleService {
 
   /* registro */
   async signUp(email: string, password: string) {
+    let status!:boolean
+    const isUser = await this.PasswordManagerService.isUser(email)
+    if(isUser == 'user register'){
+      console.log("usuario registrado")
+      return
+    }
+    console.log("usuario no registrado")
     return await this.afAuth
       .createUserWithEmailAndPassword(email, password)
       .then((result) => {
@@ -88,8 +94,10 @@ export class GoogleService {
   }
   onLogout() {
     this.afAuth.signOut().then(() => {
+      localStorage.removeItem('userInfo');
+      localStorage.removeItem('userPath');
       localStorage.removeItem('user');
-      localStorage.removeItem('userId');
+
       this.userData = null;
       console.log(localStorage.getItem('user'));
       this.router.navigate(['/']);
@@ -100,34 +108,28 @@ export class GoogleService {
   /* new Auth.GoogleAuthProvider() nos va a abrir la pestana */
 
   googleAuth() {
-    return this.AuthLogin(new Auth.GoogleAuthProvider()).then((result: any) => {
-      /* la promesa devuelve un result con datos (user) */
-      console.log(result);
-      /* guardamos los datos del usuario que se registra userDta */
-      this.userData = this.setUserData(result);
-
-      /* guardamos los datos del registrado en el local storage */
-      localStorage.setItem('user', JSON.stringify(this.userData));
-      
-      /* luego usamos la propiedad CreateUser(result.user.email) */
-      /* para crear un usuario en el caso de que sea necesario */
-      this.PasswordManagerService.createUser(result.user.email)
-        .then((response) => {
-          if (response != null) {
-            console.log('colection de users creada googleService');
+    return this.afAuth
+      .signInWithPopup(new Auth.GoogleAuthProvider())
+      .then((res) => {
+        console.log(res);
+        this.userData = this.setUserData(res.user);
+        localStorage.setItem('userInfo', JSON.stringify(this.userData));
+        this.PasswordManagerService.isUser(this.userData).then((respuesta) => {
+          if (respuesta == 'user register') {
+            console.log('el usuario ya esta en la base de datos');
+            console.log(`el usuario ${res.user?.email}`);
+            console.log(`bienvenido ${this.userData.displayNamae}`);
+            this.router.navigate(['/site-list']);
+            return
           }
-          console.log("YA ESTA REGISTRADO")
-          
-        })
-        .catch((err) => {
-          this.router.navigate(['/'])
+          this.PasswordManagerService.createUser(this.userData);
+          console.log('el usuario es nuevo y se creo en la base de datos');
+          this.router.navigate(['/site-list']);
         });
-    });
-  }
-
-  AuthLogin(provider: any) {
-    /* nos va a devolver los datos que le asignemos al provider (usur) */
-    return this.afAuth.signInWithPopup(provider);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   /*   get isLoggedIn():boolean{
