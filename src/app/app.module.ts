@@ -16,6 +16,7 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SingUpComponent } from './sing-up/sing-up.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,

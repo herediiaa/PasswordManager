@@ -59,4 +59,7 @@ export class SingUpComponent {
     this.isSuccess = true;
     this.popMessage = text;
   }
+  registerByGoogle(){
+    return this.googleAuth.googleAuth()
+  }
 }

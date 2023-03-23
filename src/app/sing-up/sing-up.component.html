@@ -85,12 +85,21 @@
             </button>
           </form>
           <button
+          (click)="registerByGoogle()"
           type="button"
           routerLink="/"
           class="text-center border-2 bg-white flex justify-center gap-1 text-black border-gray-900 font-medium w-full py-2.5 px-5 rounded-lg shadow-md"
         >
-          I Have an Account
+          With Google
         </button> 
+
+        <button
+        type="button"
+        routerLink="/"
+        class="text-center border-2 bg-white flex justify-center gap-1 text-black border-gray-900 font-medium w-full py-2.5 px-5 rounded-lg shadow-md"
+      >
+        I Have an Account
+      </button> 
         </div>
       </div>
     </div>
